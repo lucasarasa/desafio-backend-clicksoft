@@ -81,6 +81,10 @@ export default class OrganizerController {
         return response.forbidden({ message: 'Você só pode editar seus próprios eventos' })
       if (error.message === 'Capacity must be greater than zero')
         return response.badRequest({ message: 'Capacidade deve ser maior que zero' })
+      if (error.message === 'Cannot update event with enrolled participants')
+        return response.conflict({
+          message: 'Não é possível atualizar evento com participantes inscritos',
+        })
 
       return response.status(400).send({ message: error.message || 'Erro ao atualizar evento' })
     }

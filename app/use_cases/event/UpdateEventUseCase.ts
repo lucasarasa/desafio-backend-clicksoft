@@ -27,6 +27,11 @@ export default class UpdateEventUseCase {
       throw new Error('Capacity must be greater than zero')
     }
 
+    const enrollmentCount = await this.eventRepository.getEnrollmentCount(eventId)
+    if (enrollmentCount > 0) {
+      throw new Error('Cannot update event with enrolled participants')
+    }
+
     const updatedEvent = await this.eventRepository.update(eventId, data)
     return updatedEvent
   }
