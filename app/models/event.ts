@@ -38,6 +38,7 @@ export default class Event extends BaseModel {
     pivotForeignKey: 'event_id',
     relatedKey: 'id',
     pivotRelatedForeignKey: 'participant_id',
+    pivotTimestamps: true,
   })
   declare participantes: ManyToMany<typeof Participant>
 
