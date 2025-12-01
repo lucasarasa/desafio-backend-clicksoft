@@ -29,6 +29,26 @@
       "key": "eventId",
       "value": "",
       "type": "string"
+    },
+    {
+      "key": "eventId_capacity",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "eventId_conflictA",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "eventId_conflictB",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "eventId_owner",
+      "value": "",
+      "type": "string"
     }
   ],
   "item": [
@@ -401,7 +421,7 @@
                 "exec": [
                   "const response = pm.response.json();",
                   "if (response.event && response.event.id) {",
-                  "    pm.collectionVariables.set('eventId', response.event.id);",
+                  "    pm.collectionVariables.set('eventId_capacity', response.event.id);",
                   "}"
                 ],
                 "type": "text/javascript"
@@ -411,14 +431,8 @@
           "request": {
             "method": "POST",
             "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Authorization",
-                "value": "Bearer {{organizerToken}}"
-              }
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{organizerToken}}" }
             ],
             "body": {
               "mode": "raw",
@@ -437,19 +451,10 @@
           "request": {
             "method": "POST",
             "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Authorization",
-                "value": "Bearer {{participantToken}}"
-              }
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{participantToken}}" }
             ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"eventId\": {{eventId}}\n}"
-            },
+            "body": { "mode": "raw", "raw": "{\n  \"eventId\": {{eventId_capacity}}\n}" },
             "url": {
               "raw": "{{baseUrl}}/participants/me/events",
               "host": ["{{baseUrl}}"],
@@ -463,19 +468,10 @@
           "request": {
             "method": "POST",
             "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Authorization",
-                "value": "Bearer {{participant2Token}}"
-              }
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{participant2Token}}" }
             ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"eventId\": {{eventId}}\n}"
-            },
+            "body": { "mode": "raw", "raw": "{\n  \"eventId\": {{eventId_capacity}}\n}" },
             "url": {
               "raw": "{{baseUrl}}/participants/me/events",
               "host": ["{{baseUrl}}"],
@@ -485,22 +481,30 @@
           "response": []
         },
         {
-          "name": "RN02 - Conflito de Horário (Rodar 2 Vezes)",
+          "name": "RN02 - 1. Criar Evento A (teste de conflito)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.json();",
+                  "if (response.event && response.event.id) {",
+                  "    pm.collectionVariables.set('eventId_conflictA', response.event.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Authorization",
-                "value": "Bearer {{organizerToken}}"
-              }
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{organizerToken}}" }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Evento Mesmo Horário\",\n  \"date_hour\": \"2024-12-15T14:00:00\",\n  \"localization\": \"Sala 2\",\n  \"description\": \"Mesmo horário do outro evento\",\n  \"capacity_max\": 30\n}"
+              "raw": "{\n  \"name\": \"Evento Conflito A\",\n  \"date_hour\": \"2024-12-21T09:00:00\",\n  \"localization\": \"Sala A\",\n  \"description\": \"Evento A\",\n  \"capacity_max\": 20\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/organizers/events",
@@ -511,27 +515,120 @@
           "response": []
         },
         {
-          "name": "RN05 - Campos Obrigatórios Faltando",
+          "name": "RN02 - 2. Criar Evento B (mesmo horário - conflito)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.json();",
+                  "if (response.event && response.event.id) {",
+                  "    pm.collectionVariables.set('eventId_conflictB', response.event.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Authorization",
-                "value": "Bearer {{organizerToken}}"
-              }
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{organizerToken}}" }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Evento Incompleto\"\n}"
+              "raw": "{\n  \"name\": \"Evento Conflito B\",\n  \"date_hour\": \"2024-12-21T09:00:00\",\n  \"localization\": \"Sala B\",\n  \"description\": \"Evento B\",\n  \"capacity_max\": 20\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/organizers/events",
               "host": ["{{baseUrl}}"],
               "path": ["organizers", "events"]
+            }
+          },
+          "response": []
+        },
+
+        {
+          "name": "RN04 - 1. Criar Evento (para testar bloqueio de update/delete)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.json();",
+                  "if (response.event && response.event.id) {",
+                  "    pm.collectionVariables.set('eventId_owner', response.event.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{organizerToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Evento Owner\",\n  \"date_hour\": \"2024-12-22T11:00:00\",\n  \"localization\": \"Auditório\",\n  \"description\": \"Evento para teste de bloqueio\",\n  \"capacity_max\": 10\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/organizers/events",
+              "host": ["{{baseUrl}}"],
+              "path": ["organizers", "events"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "RN04 - 2. Participante se inscreve no evento (para criar participante)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{participantToken}}" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"eventId\": {{eventId_owner}}\n}" },
+            "url": {
+              "raw": "{{baseUrl}}/participants/me/events",
+              "host": ["{{baseUrl}}"],
+              "path": ["participants", "me", "events"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "RN04 - 3. Organizador tenta atualizar evento com participante (DEVE FALHAR)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{organizerToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Tentativa Update Após Inscrição\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/organizers/events/{{eventId_owner}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["organizers", "events", "{{eventId_owner}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "RN04 - 4. Organizador tenta deletar evento com participante (DEVE FALHAR)",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{organizerToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/organizers/events/{{eventId_owner}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["organizers", "events", "{{eventId_owner}}"]
             }
           },
           "response": []
