@@ -1,7 +1,6 @@
 import Event from '#models/event'
-import type { CreateEventDto } from '../dtos/event/CreateEventDto.js'
-import type { UpdateEventDto } from '../dtos/event/UpdateEventDto.js'
-
+import type { CreateEventDto } from '../../dtos/event/CreateEventDto.js'
+import type { UpdateEventDto } from '../../dtos/event/UpdateEventDto.js'
 export default class EventRepository {
   async create(data: CreateEventDto & { organizer_id: number }): Promise<Event> {
     return await Event.create(data)
