@@ -1,0 +1,542 @@
+{
+  "info": {
+    "name": "API de Gestão de Eventos",
+    "description": "Collection completa com todas as rotas da API de Gestão de Eventos",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3333",
+      "type": "string"
+    },
+    {
+      "key": "participantToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "organizerToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "participant2Token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "eventId",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Signup Participante",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"João Silva\",\n  \"email\": \"joao@email.com\",\n  \"cpf\": \"12345678901\",\n  \"password\": \"senha123\",\n  \"role\": \"participant\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/signup",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "signup"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Signup Organizador",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Maria Eventos\",\n  \"email\": \"maria@eventos.com\",\n  \"cpf\": \"98765432100\",\n  \"password\": \"senha123\",\n  \"role\": \"organizer\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/signup",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "signup"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Signin Participante",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.json();",
+                  "if (response.token) {",
+                  "    pm.collectionVariables.set('participantToken', response.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"joao@email.com\",\n  \"password\": \"senha123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/signin",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "signin"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Signup Participante 2 (Para Teste RN01)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.json();",
+                  "if (response.token) {",
+                  "    pm.collectionVariables.set('participant2Token', response.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Carlos Mendes\",\n  \"email\": \"pedro.souza@email.com\",\n  \"cpf\": \"11122233344\",\n  \"password\": \"senha123\",\n  \"role\": \"participant\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/signup",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "signup"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Signin Organizador",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.json();",
+                  "if (response.token) {",
+                  "    pm.collectionVariables.set('organizerToken', response.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"maria@eventos.com\",\n  \"password\": \"senha123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/signin",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "signin"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Participante",
+      "item": [
+        {
+          "name": "Atualizar Meus Dados",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{participantToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"João Silva Atualizado\",\n  \"email\": \"joao.novo@email.com\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/participants/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["participants", "me"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Inscrever em Evento",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{participantToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"eventId\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/participants/me/events",
+              "host": ["{{baseUrl}}"],
+              "path": ["participants", "me", "events"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar Meus Eventos",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{participantToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/participants/me/events",
+              "host": ["{{baseUrl}}"],
+              "path": ["participants", "me", "events"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cancelar Inscrição",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{participantToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/participants/me/events/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["participants", "me", "events", "1"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Organizador",
+      "item": [
+        {
+          "name": "Criar Evento",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.json();",
+                  "if (response.event && response.event.id) {",
+                  "    pm.collectionVariables.set('eventId', response.event.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{organizerToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Workshop AdonisJS\",\n  \"date_hour\": \"2024-12-15T14:00:00\",\n  \"localization\": \"Centro de Convenções - Sala 203\",\n  \"description\": \"Aprenda AdonisJS do zero ao avançado\",\n  \"capacity_max\": 50\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/organizers/events",
+              "host": ["{{baseUrl}}"],
+              "path": ["organizers", "events"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Atualizar Evento",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{organizerToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Workshop AdonisJS Avançado\",\n  \"capacity_max\": 100\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/organizers/events/{{eventId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["organizers", "events", "{{eventId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Deletar Evento",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{organizerToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/organizers/events/{{eventId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["organizers", "events", "{{eventId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar Participantes do Evento",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{organizerToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/organizers/events/{{eventId}}/participants",
+              "host": ["{{baseUrl}}"],
+              "path": ["organizers", "events", "{{eventId}}", "participants"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Testes de Regras de Negócio",
+      "item": [
+        {
+          "name": "RN01 - 1. Criar Evento com Capacidade 1",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.json();",
+                  "if (response.event && response.event.id) {",
+                  "    pm.collectionVariables.set('eventId', response.event.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{organizerToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Evento Teste Capacidade\",\n  \"date_hour\": \"2024-12-20T10:00:00\",\n  \"localization\": \"Sala 1\",\n  \"description\": \"Teste de capacidade máxima\",\n  \"capacity_max\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/organizers/events",
+              "host": ["{{baseUrl}}"],
+              "path": ["organizers", "events"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "RN01 - 2. Primeiro Participante se Inscreve (OK)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{participantToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"eventId\": {{eventId}}\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/participants/me/events",
+              "host": ["{{baseUrl}}"],
+              "path": ["participants", "me", "events"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "RN01 - 3. Segundo Participante tenta se Inscrever (DEVE FALHAR)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{participant2Token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"eventId\": {{eventId}}\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/participants/me/events",
+              "host": ["{{baseUrl}}"],
+              "path": ["participants", "me", "events"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "RN02 - Conflito de Horário (Rodar 2 Vezes)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{organizerToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Evento Mesmo Horário\",\n  \"date_hour\": \"2024-12-15T14:00:00\",\n  \"localization\": \"Sala 2\",\n  \"description\": \"Mesmo horário do outro evento\",\n  \"capacity_max\": 30\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/organizers/events",
+              "host": ["{{baseUrl}}"],
+              "path": ["organizers", "events"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "RN05 - Campos Obrigatórios Faltando",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{organizerToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Evento Incompleto\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/organizers/events",
+              "host": ["{{baseUrl}}"],
+              "path": ["organizers", "events"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
